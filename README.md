@@ -1,1 +1,1 @@
-# stocks-alerts-telegram-bot
+# Stocks Alert Telegram BOT
