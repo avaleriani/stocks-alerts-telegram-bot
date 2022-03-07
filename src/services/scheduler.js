@@ -1,4 +1,4 @@
-import { ToadScheduler, SimpleIntervalJob, Task, AsyncTask } from "toad-scheduler";
+import { ToadScheduler, SimpleIntervalJob, AsyncTask } from "toad-scheduler";
 import { JOB_CHECK_PRICE, JOB_MANAGE_SCHEDULE } from "../utils/constants.js";
 
 export const SchedulerInit = () => {
@@ -6,6 +6,7 @@ export const SchedulerInit = () => {
 };
 
 export const SchedulerRunTasks = (scheduler, checkPriceFn, manageSchedulerFn) => {
+  // Define tasks
   const taskCheckPrice = new AsyncTask("check-price-task", checkPriceFn, err => {
     console.error("Error in taskCheckPrice", err);
   });
@@ -15,16 +16,22 @@ export const SchedulerRunTasks = (scheduler, checkPriceFn, manageSchedulerFn) =>
   });
 
   // EVERY 5 SECONDS
-  const checkPrice = new SimpleIntervalJob({ seconds: 20, runImmediately: true }, taskCheckPrice, JOB_MANAGE_SCHEDULE);
+  const checkPrice = new SimpleIntervalJob({ seconds: 5 }, taskCheckPrice, JOB_CHECK_PRICE);
 
   // EVERY ONE MINUTE
-  const manageSchedule = new SimpleIntervalJob(
-    { minutes: 1, runImmediately: true },
-    taskManageSchedule,
-    JOB_CHECK_PRICE,
-  );
+  const manageSchedule = new SimpleIntervalJob({ minutes: 1 }, taskManageSchedule, JOB_MANAGE_SCHEDULE);
 
   //create and start jobs
   scheduler.addSimpleIntervalJob(manageSchedule);
   scheduler.addSimpleIntervalJob(checkPrice);
+
+  // stop all the tasks, will be managed by the scheduler.
+  scheduler.stop();
+
+  // Bind stopping all scheduler tasks to the process exit event
+  [`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, `uncaughtException`, `SIGTERM`].forEach(eventType => {
+    process.on(eventType, () => {
+      scheduler.stop();
+    });
+  });
 };
