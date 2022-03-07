@@ -7,7 +7,8 @@ export const checkPriceFn = async bot => {
   await bot.telegram.sendMessage(process.env.CHAT_ID, "Checking price...");
   const { price } = await fetchQuote(process.env.TICKER);
   if (shouldNotify(price)) {
-    const message = `Current price is: ${price}`;
+    const isTrendingDown = price;
+    const message = `Current price is: ${price} 📉📈`;
     await bot.telegram.sendMessage(process.env.CHAT_ID, message);
   }
 };
@@ -18,15 +19,13 @@ export const manageSchedulerFn = async (bot, scheduler) => {
 
   // Check if market is open
   const { marketState } = await fetchQuote(process.env.TICKER);
-  // const isMarketOpen = marketState !== "CLOSED";
-  const isMarketOpen = true; // TODO: Remove this line
+  const isMarketOpen = marketState !== "CLOSED";
 
+  // Check if bot is already running
   const priceJob = scheduler.getById(JOB_CHECK_PRICE);
   const isBotStarted = priceJob && priceJob.getStatus() === "running";
 
-  console.log(isMarketOpen, isBotStarted);
-
-  await bot.telegram.sendMessage(process.env.CHAT_ID, isMarketOpen ? "Market is open" : "Market is closed");
+  await bot.telegram.sendMessage(process.env.CHAT_ID, isMarketOpen ? "Market is open 🚀🚀🚀" : "Market is closed");
 
   if (isMarketOpen && !isBotStarted) {
     console.log("Starting price bot", isMarketOpen && isBotStarted, isMarketOpen, isBotStarted, priceJob.getStatus());
