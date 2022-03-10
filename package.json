@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "pm2 ./src/app.js",
+    "start": "pm2 start ./src/app.js",
     "dev": "pm2 start ./src/app.js --watch",
     "dev-node": "node ./src/app.js"
   },
