@@ -14,6 +14,7 @@ const Bot = async () => {
   // Bind stopping all scheduler tasks to the process exit event
   [`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, `uncaughtException`, `SIGTERM`].forEach(eventType => {
     process.on(eventType, () => {
+      bot.telegram.sendMessage(process.env.CHAT_ID, "Bot stopped");
       bot.stop("SIGINT");
     });
   });

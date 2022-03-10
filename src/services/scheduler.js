@@ -16,7 +16,7 @@ export const SchedulerRunTasks = (scheduler, checkPriceFn, manageSchedulerFn) =>
   });
 
   // EVERY 5 SECONDS
-  const checkPrice = new SimpleIntervalJob({ seconds: 5 }, taskCheckPrice, JOB_CHECK_PRICE);
+  const checkPrice = new SimpleIntervalJob({ seconds: 10 }, taskCheckPrice, JOB_CHECK_PRICE);
 
   // EVERY ONE MINUTE
   const manageSchedule = new SimpleIntervalJob({ minutes: 1 }, taskManageSchedule, JOB_MANAGE_SCHEDULE);

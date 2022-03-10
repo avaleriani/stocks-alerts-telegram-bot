@@ -7,6 +7,6 @@ export const state = {
   volume30Triggered: false,
 };
 
-export const setState = (key, value) => {
-  state[key] = value;
+export const setState = (state, value) => {
+  Object.assign(state, value);
 };
