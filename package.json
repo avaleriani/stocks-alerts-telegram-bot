@@ -8,8 +8,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "pm2 start ./src/app.js",
-    "dev": "pm2 start ./src/app.js --watch",
+    "start": "pm2 start ./src/app.js --name stocks-alerts-telegram-bot",
+    "dev": "pm2 start ./src/app.js --watch --name dev-stocks-alerts-telegram-bot",
     "dev-node": "node ./src/app.js"
   },
   "dependencies": {
