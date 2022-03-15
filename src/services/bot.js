@@ -6,7 +6,7 @@ const Bot = async () => {
 
   // Control response to check if bot is running on chat
   bot.on("message", async ctx => {
-    await ctx.telegram.sendMessage(ctx.chat.id, "OK");
+    await ctx.telegram.sendMessage(ctx.chat.id, `Status: Running, date: ${new Date().toLocaleDateString()}`);
   });
 
   await bot.launch();
