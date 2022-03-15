@@ -8,9 +8,10 @@ export const defaultState = {
 };
 
 const useState = defaultValue => {
-  let value = defaultValue;
-  const setValue = newValue => (value = newValue);
-  return [value, setValue];
+  global.value = defaultValue;
+  const setValue = newValue => (global.value = newValue);
+
+  return [global.value, setValue];
 };
 
 export default useState;

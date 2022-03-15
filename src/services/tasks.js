@@ -11,7 +11,6 @@ export const checkPriceFn = async (state, setState, bot) => {
 
 // Decides if it should be running price check task because the market is open.
 export const manageSchedulerFn = async (state, setState, bot, scheduler) => {
-
   // Check if market is open
   const { marketState } = await fetchQuote(process.env.TICKER);
   const isMarketOpen = marketState !== "CLOSED";
@@ -27,8 +26,7 @@ export const manageSchedulerFn = async (state, setState, bot, scheduler) => {
     );
   }
 
-  setState({ ...state, marketOpen: isMarketOpen });
-  setState({ ...state, botRunning: isBotStarted });
+  setState({ ...state, marketOpen: isMarketOpen, botRunning: isBotStarted });
 
   if (isMarketOpen && !isBotStarted) {
     // console.log("Starting price bot", isMarketOpen && isBotStarted, isMarketOpen, isBotStarted, priceJob.getStatus());
