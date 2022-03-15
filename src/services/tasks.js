@@ -1,16 +1,16 @@
 import fetchQuote from "./ticker-data.js";
 import { JOB_CHECK_PRICE } from "../utils/constants.js";
 import { notify } from "../utils/notification.js";
-import { setState, state } from "../utils/state.js";
+import { defaultState } from "../utils/useState.js";
 
 // Check the price of the stock every 5 minutes and decide if price change triggers a notification
-export const checkPriceFn = async (currentState, bot) => {
+export const checkPriceFn = async (state, setState, bot) => {
   const quote = await fetchQuote(process.env.TICKER);
-  await notify(currentState, quote, bot);
+  await notify(state, setState, quote, bot);
 };
 
 // Decides if it should be running price check task because the market is open.
-export const manageSchedulerFn = async (currentState, bot, scheduler) => {
+export const manageSchedulerFn = async (state, setState, bot, scheduler) => {
   // await bot.telegram.sendMessage(process.env.CHAT_ID, "Running scheduler check...");
 
   // Check if market is open
@@ -28,8 +28,8 @@ export const manageSchedulerFn = async (currentState, bot, scheduler) => {
     );
   }
 
-  setState(currentState, { marketOpen: isMarketOpen });
-  setState(currentState, { botRunning: isBotStarted });
+  setState({ ...state, marketOpen: isMarketOpen });
+  setState({ ...state, botRunning: isBotStarted });
 
   if (isMarketOpen && !isBotStarted) {
     // console.log("Starting price bot", isMarketOpen && isBotStarted, isMarketOpen, isBotStarted, priceJob.getStatus());
@@ -38,6 +38,6 @@ export const manageSchedulerFn = async (currentState, bot, scheduler) => {
   } else if (!isMarketOpen && isBotStarted) {
     // await bot.telegram.sendMessage(process.env.CHAT_ID, "Stopping price check...");
     priceJob.stop();
-    currentState = Object.assign({}, state);
+    setState(defaultState);
   }
 };
