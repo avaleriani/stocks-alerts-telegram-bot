@@ -15,7 +15,7 @@ export const SchedulerRunTasks = (scheduler, checkPriceFn, manageSchedulerFn) =>
     console.error("Error in taskManageSchedule", err);
   });
 
-  // EVERY 5 SECONDS
+  // EVERY 10 SECONDS
   const checkPrice = new SimpleIntervalJob({ seconds: 10 }, taskCheckPrice, JOB_CHECK_PRICE);
 
   // EVERY ONE MINUTE

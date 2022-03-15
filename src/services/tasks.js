@@ -11,7 +11,6 @@ export const checkPriceFn = async (state, setState, bot) => {
 
 // Decides if it should be running price check task because the market is open.
 export const manageSchedulerFn = async (state, setState, bot, scheduler) => {
-  // await bot.telegram.sendMessage(process.env.CHAT_ID, "Running scheduler check...");
 
   // Check if market is open
   const { marketState } = await fetchQuote(process.env.TICKER);
@@ -21,7 +20,7 @@ export const manageSchedulerFn = async (state, setState, bot, scheduler) => {
   const priceJob = scheduler.getById(JOB_CHECK_PRICE);
   const isBotStarted = priceJob && priceJob.getStatus() === "running";
 
-  if (currentState.marketOpen !== isMarketOpen) {
+  if (state.marketOpen !== isMarketOpen) {
     await bot.telegram.sendMessage(
       process.env.CHAT_ID,
       isMarketOpen ? "Market is open 🚀🚀🚀" : "Market is closed 🔚🔚🔚",
@@ -33,10 +32,10 @@ export const manageSchedulerFn = async (state, setState, bot, scheduler) => {
 
   if (isMarketOpen && !isBotStarted) {
     // console.log("Starting price bot", isMarketOpen && isBotStarted, isMarketOpen, isBotStarted, priceJob.getStatus());
-    // await bot.telegram.sendMessage(process.env.CHAT_ID, "Starting price check...");
+    await bot.telegram.sendMessage(process.env.CHAT_ID, "Starting price check...");
     priceJob.start();
   } else if (!isMarketOpen && isBotStarted) {
-    // await bot.telegram.sendMessage(process.env.CHAT_ID, "Stopping price check...");
+    await bot.telegram.sendMessage(process.env.CHAT_ID, "Stopping price check...");
     priceJob.stop();
     setState(defaultState);
   }
