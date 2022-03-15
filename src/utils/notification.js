@@ -50,6 +50,7 @@ export const notify = async (state, setState, quote, bot) => {
   }
   // TODO: what happens if price decreased more than CHANGE_PERCENTAGE and then went up again?
 
+  console.log({ state });
   if (message.length > 0) {
     await bot.telegram.sendMessage(process.env.CHAT_ID, message.join("\n"));
   }
